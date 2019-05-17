@@ -9,8 +9,8 @@
 
     <EditText
         android:id="@+id/emailadres"
-        android:layout_width="375dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -23,8 +23,8 @@
 
     <EditText
         android:id="@+id/wachtwoord"
-        android:layout_width="375dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -37,10 +37,10 @@
 
     <Button
         android:id="@+id/inloggen"
-        android:layout_width="375dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:background="@color/colorAccent"
         android:onClick="inloggen"
@@ -52,8 +52,8 @@
 
     <Button
         android:id="@+id/registreren"
-        android:layout_width="375dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
