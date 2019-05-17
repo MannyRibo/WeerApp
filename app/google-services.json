@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "232761416388",
+    "firebase_url": "https://app1-efacc.firebaseio.com",
+    "project_id": "app1-efacc",
+    "storage_bucket": "app1-efacc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232761416388:android:f9e0cd6a7979b326",
+        "android_client_info": {
+          "package_name": "com.example.weerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232761416388-9pp2idqqir5j99dafg84lqp041autnn2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.weerapp",
+            "certificate_hash": "29a0a785f612930c8f6acf16ba9e793bb8eb4040"
+          }
+        },
+        {
+          "client_id": "232761416388-948edtd3r5psdgrlbt69fjboqpf95uao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxR8Snf7cWMgBRHrUTfYDxDf4UNrxHjiA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232761416388-948edtd3r5psdgrlbt69fjboqpf95uao.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
