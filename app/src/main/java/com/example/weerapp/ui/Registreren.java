@@ -1,16 +1,22 @@
-package com.example.weerapp;
+package com.example.weerapp.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.weerapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,6 +30,31 @@ public class Registreren extends AppCompatActivity {
     private EditText nieuwWachtwoord;
     private Button registreerbtn;
     private static final String TAG = "Registreren";
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.afsluiten_main)
+            new AlertDialog.Builder(this)
+                    .setTitle("Afsluiten")
+                    .setMessage("Weet je zeker dat je wilt afsluiten?")
+
+                    .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            finishAffinity();
+                        }
+                    })
+
+                    .setNegativeButton("Nee", null)
+                    .show();
+        return true;
+    }
 
     @Override
     public void onStart() {
@@ -59,7 +90,12 @@ public class Registreren extends AppCompatActivity {
         String emailadres = nieuwEmailadres.getText().toString();
         String wachtwoord = nieuwWachtwoord.getText().toString();
 
-        if ((!TextUtils.isEmpty(emailadres)) || (!TextUtils.isEmpty(wachtwoord))) {
+        if ((TextUtils.isEmpty(emailadres)) || (TextUtils.isEmpty(wachtwoord))) {
+            // If sign in fails, display a message to the user.
+            Toast.makeText(Registreren.this,
+                    "Voer een geldig e-mailadres en wachtwoord in",
+                    Toast.LENGTH_LONG).show(); }
+                    else {
             mAuth.createUserWithEmailAndPassword(emailadres, wachtwoord)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -68,16 +104,9 @@ public class Registreren extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                Toast.makeText(Registreren.this,
-                                        "Voer een geldig e-mailadres en wachtwoord in",
-                                        Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
         }
-
     }
 }

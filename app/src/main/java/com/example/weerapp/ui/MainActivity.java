@@ -1,16 +1,20 @@
-package com.example.weerapp;
+package com.example.weerapp.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.weerapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -22,6 +26,31 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText nieuwEmailadres;
     private EditText nieuwWachtwoord;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.afsluiten_main)
+        new AlertDialog.Builder(this)
+                .setTitle("Afsluiten")
+                .setMessage("Weet je zeker dat je wilt afsluiten?")
+
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishAffinity();
+                    }
+                })
+
+                .setNegativeButton("Nee", null)
+                .show();
+        return true;
+    }
 
     @Override
     public void onStart() {
@@ -69,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Toast.makeText(MainActivity.this, "E-mailadres of wachtwoord is incorrect",
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             }
 
                         }
@@ -85,5 +114,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, Registreren.class);
         startActivity(intent);
     }
+
 
 }

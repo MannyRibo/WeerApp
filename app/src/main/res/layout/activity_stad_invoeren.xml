@@ -5,28 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context=".StadInvoeren">
+    tools:context=".ui.StadInvoeren">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/editTextStad"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="Voer een stad in"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gps" />
+        app:layout_constraintTop_toBottomOf="@+id/gpsicon" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/controleerbtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:background="@color/colorAccent"
         android:onClick="controleren"
@@ -34,10 +32,10 @@
         android:textColor="@android:color/background_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uitlogbtn" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextStad" />
 
     <ImageView
-        android:id="@+id/gps"
+        android:id="@+id/gpsicon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="140dp"
@@ -49,32 +47,17 @@
         app:srcCompat="@drawable/gps" />
 
     <Button
-        android:id="@+id/uitlogbtn"
-        android:layout_width="0dp"
+        android:id="@+id/locatiebtn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:background="@color/colorAccent"
-        android:onClick="uitloggen"
-        android:text="UITLOGGEN"
+        android:drawableStart="@drawable/ic_location"
+        android:onClick="locatieBepalen"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="GPS gebruiken"
         android:textColor="@android:color/background_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wachtwoordresetbtn" />
+        app:layout_constraintBottom_toBottomOf="@+id/editTextStad"
+        app:layout_constraintEnd_toEndOf="@+id/controleerbtn" />
 
-    <Button
-        android:id="@+id/wachtwoordresetbtn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/colorAccent"
-        android:onClick="wachtwoordreset"
-        android:text="Wachtwoord resetten"
-        android:textColor="@android:color/background_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
 </android.support.constraint.ConstraintLayout>

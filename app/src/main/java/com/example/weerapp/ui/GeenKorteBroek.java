@@ -1,7 +1,9 @@
-package com.example.weerapp;
+package com.example.weerapp.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.weerapp.R;
 
 public class GeenKorteBroek extends AppCompatActivity {
 
