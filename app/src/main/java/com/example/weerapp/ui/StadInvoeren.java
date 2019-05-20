@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -32,18 +33,18 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class StadInvoeren extends AppCompatActivity {
 
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
-    private FusedLocationProviderClient fusedLocationClient;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final String TAG = "StadInvoeren";
-    EditText editTextStad;
+    TextView gpsInformatie;
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stad_invoeren);
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        editTextStad = findViewById(R.id.editTextStad);
+        gpsInformatie = findViewById(R.id.gpsInformatie);
+
     }
 
     @Override
@@ -107,13 +108,13 @@ public class StadInvoeren extends AppCompatActivity {
     public void locatieBepalen(View view) {
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(StadInvoeren.this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
+                Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Permission is not granted
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(StadInvoeren.this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
@@ -125,8 +126,8 @@ public class StadInvoeren extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ActivityCompat.requestPermissions(StadInvoeren.this,
-                                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
                             }
                         })
                         .setNegativeButton("Annuleren", new DialogInterface.OnClickListener() {
@@ -141,10 +142,10 @@ public class StadInvoeren extends AppCompatActivity {
             } else {
                 // No explanation needed; request the permission
                 ActivityCompat.requestPermissions(StadInvoeren.this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
-                // MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION is an
+                // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             }
@@ -155,23 +156,37 @@ public class StadInvoeren extends AppCompatActivity {
                 showAlertGeenGPS();
             }
 
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(StadInvoeren.this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                Double latitude = location.getLatitude();
-                                Double longitude = location.getLongitude();
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-                                editTextStad.setText(latitude + "en " + longitude);
-                            }
-                            else {
-                                if(manager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
-                                Toast.makeText(StadInvoeren.this, "Geen locatie gevonden", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
+            final LocationListener locationListener = new LocationListener() {
+                public void onLocationChanged(Location location) {
+                    if (location != null) {
+                        Double latitude = location.getLatitude();
+                        Double longitude = location.getLongitude();
+
+                        gpsInformatie.setText("Lengtegraad: " + longitude + " en breedtegraad: "
+                        + latitude) ;
+                        gpsInformatie.setVisibility(View.VISIBLE);
+
+                       // locationManager.removeUpdates(locationListener);
+                    }
+
+                    else {
+                        if(manager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
+                            Toast.makeText(StadInvoeren.this, "Geen locatie gevonden", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+                public void onProviderEnabled(String provider) {}
+
+                public void onProviderDisabled(String provider) {}
+            };
+
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
         }
     }
 
@@ -196,7 +211,7 @@ public class StadInvoeren extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION) {
+        if(requestCode == MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
             } else {

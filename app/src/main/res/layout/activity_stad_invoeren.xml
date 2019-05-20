@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="16dp"
         android:background="@color/colorAccent"
         android:onClick="controleren"
@@ -59,5 +59,14 @@
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="@+id/editTextStad"
         app:layout_constraintEnd_toEndOf="@+id/controleerbtn" />
+
+    <TextView
+        android:id="@+id/gpsInformatie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="kut"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/editTextStad"
+        app:layout_constraintTop_toBottomOf="@+id/editTextStad" />
 
 </android.support.constraint.ConstraintLayout>
