@@ -52,21 +52,12 @@
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:drawableStart="@drawable/ic_location"
-        android:onClick="locatieBepalen"
+        android:onClick="checkPermissies"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="GPS gebruiken"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="@+id/editTextStad"
         app:layout_constraintEnd_toEndOf="@+id/controleerbtn" />
-
-    <TextView
-        android:id="@+id/gpsInformatie"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="kut"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/editTextStad"
-        app:layout_constraintTop_toBottomOf="@+id/editTextStad" />
 
 </android.support.constraint.ConstraintLayout>

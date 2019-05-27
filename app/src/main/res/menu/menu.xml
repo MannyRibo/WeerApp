@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/geschiedenis"
+        android:icon="@drawable/ic_history_black_24dp"
+        android:title="Geschiedenis"
+        app:showAsAction="ifRoom"></item>
+
     <item android:id="@+id/afsluiten"
         android:title="Afsluiten"
         app:showAsAction="never"></item>

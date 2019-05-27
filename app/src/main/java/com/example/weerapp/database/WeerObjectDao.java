@@ -1,4 +1,3 @@
-/*
 package com.example.weerapp.database;
 
 import android.arch.persistence.room.Dao;
@@ -14,7 +13,7 @@ import java.util.List;
 @Dao
 public interface WeerObjectDao {
 
-    // @Query("SELECT * FROM ") //naam entity object
+    @Query("SELECT * FROM weerobject")
     List<WeerObject> getAllWeerObjects();
 
     @Insert
@@ -29,4 +28,3 @@ public interface WeerObjectDao {
     @Update
     void updateWeerObject(WeerObject weerobject);
 }
-*/

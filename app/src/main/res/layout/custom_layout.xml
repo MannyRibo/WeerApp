@@ -15,7 +15,7 @@
         android:layout_marginBottom="10dp">
 
         <TextView
-            android:id="@+id/gameTitel"
+            android:id="@+id/naamStad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -27,28 +27,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/gamePlatform"
+            android:id="@+id/aantalGraden"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/gameTitel"
-            app:layout_constraintTop_toBottomOf="@+id/gameTitel" />
+            app:layout_constraintStart_toStartOf="@+id/naamStad"
+            app:layout_constraintTop_toBottomOf="@+id/naamStad" />
 
         <TextView
-            android:id="@+id/gameStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="170dp"
-            android:layout_marginTop="40dp"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/gameDatum"
+            android:id="@+id/datum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="330dp"

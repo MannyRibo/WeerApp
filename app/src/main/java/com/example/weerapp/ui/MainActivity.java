@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.weerapp.R;
+import com.example.weerapp.model.Main;
+import com.example.weerapp.model.WeerObject;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -36,19 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.afsluiten_main)
-        new AlertDialog.Builder(this)
-                .setTitle("Afsluiten")
-                .setMessage("Weet je zeker dat je wilt afsluiten?")
-
-                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        finishAffinity();
-                    }
-                })
-
-                .setNegativeButton("Nee", null)
-                .show();
+        if (item.getItemId() == R.id.afsluiten_main) {
+            afsluiten();
+        }
         return true;
     }
 
@@ -72,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         nieuwEmailadres = findViewById(R.id.emailadres);
         nieuwWachtwoord = findViewById(R.id.wachtwoord);
+
 
     }
 
@@ -103,8 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                     });
-        }
-        else {
+        } else {
             Toast.makeText(MainActivity.this, "Voer een e-mailadres en wachtwoord in", Toast.LENGTH_LONG).show();
         }
 
@@ -115,5 +107,18 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void afsluiten() {
+        new AlertDialog.Builder(this)
+                .setTitle("Afsluiten")
+                .setMessage("Weet je zeker dat je wilt afsluiten?")
 
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishAffinity();
+                    }
+                })
+
+                .setNegativeButton("Nee", null)
+                .show();
+    }
 }
