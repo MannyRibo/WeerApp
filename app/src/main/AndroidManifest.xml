@@ -8,7 +8,6 @@
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature android:name="android.hardware.location.network" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,11 +15,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.WeerGeschiedenis"></activity>
-        <activity android:name=".ui.Registreren" />
-        <activity android:name=".ui.GeenKorteBroek" />
-        <activity android:name=".ui.KorteBroek" />
-        <activity android:name=".ui.StadInvoeren" />
+        <activity android:name=".ui.WeerGeschiedenis"
+            android:label="@string/scherm_geschiedenis"></activity>
+        <activity android:name=".ui.Registreren"
+            android:label="@string/scherm_registreren"/>
+        <activity android:name=".ui.GeenKorteBroek"
+            android:label="@string/scherm_geenkortebroek"/>
+        <activity android:name=".ui.KorteBroek"
+            android:label="@string/scherm_kortebroek"/>
+        <activity android:name=".ui.StadInvoeren"
+            android:label="@string/scherm_locatiebepalen"/>
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

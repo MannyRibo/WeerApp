@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">WeerApp</string>
+    <string name="app_name">Is het weer voor een korte broek?</string>
+    <string name="scherm_geschiedenis">Geschiedenis</string>
+    <string name="scherm_registreren">Registeren</string>
+    <string name="scherm_geenkortebroek">Geen weer voor een korte broek</string>
+    <string name="scherm_kortebroek">Weer voor een korte broek</string>
+    <string name="scherm_locatiebepalen">Locatie bepalen</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.weerapp.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -14,7 +15,7 @@ import java.util.List;
 public interface WeerObjectDao {
 
     @Query("SELECT * FROM weerobject")
-    List<WeerObject> getAllWeerObjects();
+    LiveData<List<WeerObject>> getAllWeerObjects();
 
     @Insert
     void insertWeerObject(WeerObject weerobject);
@@ -22,8 +23,8 @@ public interface WeerObjectDao {
     @Delete
     void deleteWeerObject(WeerObject weerobject);
 
-    @Delete
-    void deleteAllWeerObjects(List<WeerObject> weerobjects);
+    @Query("DELETE FROM weerobject")
+    void deleteAll();
 
     @Update
     void updateWeerObject(WeerObject weerobject);

@@ -1,4 +1,3 @@
-/*
 package com.example.weerapp.ui;
 
 import android.content.Context;
@@ -16,10 +15,10 @@ import java.util.List;
 
 public class WeerObjectAdapter extends RecyclerView.Adapter<WeerObjectAdapter.ViewHolder>{
 
-    private List<WeerObject> mWeerObjecten;
+    private List<WeerObject> mWeerObjects;
 
-    public WeerObjectAdapter(List<WeerObject> mWeerObjecten) {
-        this.mWeerObjecten = mWeerObjecten;
+    public WeerObjectAdapter(List<WeerObject> mWeerObjects) {
+        this.mWeerObjects = mWeerObjects;
     }
 
     @NonNull
@@ -35,19 +34,20 @@ public class WeerObjectAdapter extends RecyclerView.Adapter<WeerObjectAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull WeerObjectAdapter.ViewHolder viewHolder, int i) {
-        WeerObject weerobject = mWeerObjecten.get(i);
-
-        //alle attributen binden zoals: viewHolder.titel.setText(game.getTitel());
+        WeerObject weerobject = mWeerObjects.get(i);
+        viewHolder.naamStad.setText(weerobject.getNaamStad());
+        viewHolder.aantalgraden.setText("" + weerobject.getMain().getTemp() + "°C");
+        viewHolder.datum.setText(weerobject.getDatum());
 
     }
 
     @Override
     public int getItemCount() {
-        return mWeerObjecten.size();
+        return mWeerObjects.size();
     }
 
     public void swapList(List<WeerObject> newList) {
-        mWeerObjecten = newList;
+        mWeerObjects = newList;
         if (newList != null) {
             // Force the RecyclerView to refresh
             this.notifyDataSetChanged();
@@ -55,12 +55,15 @@ public class WeerObjectAdapter extends RecyclerView.Adapter<WeerObjectAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        //textviews declareren zoals: TextView titel;
+        TextView naamStad;
+        TextView aantalgraden;
+        TextView datum;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            //views binden zoals: titel = itemView.findViewById(R.id.gameTitel);
+            naamStad = itemView.findViewById(R.id.naamStad);
+            aantalgraden = itemView.findViewById(R.id.aantalGraden);
+            datum = itemView.findViewById(R.id.datum);
         }
     }
 }
-*/

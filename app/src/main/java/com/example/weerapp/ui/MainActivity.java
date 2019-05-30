@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -65,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
         nieuwEmailadres = findViewById(R.id.emailadres);
         nieuwWachtwoord = findViewById(R.id.wachtwoord);
 
-
+        // titel niet weergeven
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     public void updateUI(FirebaseUser currentUser) {

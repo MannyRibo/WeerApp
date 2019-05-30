@@ -13,7 +13,7 @@ public abstract class WeerObjectRoomDatabase extends RoomDatabase {
 
     private final static String NAME_DATABASE = "weerobject_database";
 
-    public abstract WeerObjectDao weerobjectDao();
+    public abstract WeerObjectDao weerObjectDao();
 
     private static volatile WeerObjectRoomDatabase INSTANCE;
 
