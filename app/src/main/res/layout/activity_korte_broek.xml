@@ -8,27 +8,29 @@
     tools:context=".ui.KorteBroek">
 
     <ImageView
-        android:id="@+id/poppetjeblij"
+        android:id="@+id/poppetjeBlij"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
         android:contentDescription="poppetjeblij"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/happysunwithoutbackgroundsmall" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/omschrijvingKorteBroek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:text="Het is weer voor een korte broek! \n
         Het is &lt;temp&gt; °C in &lt;stad&gt;"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/poppetjeblij" />
+        app:layout_constraintTop_toBottomOf="@+id/poppetjeBlij" />
 </android.support.constraint.ConstraintLayout>

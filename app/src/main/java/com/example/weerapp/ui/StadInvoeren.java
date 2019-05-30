@@ -10,12 +10,12 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -28,13 +28,14 @@ import android.widget.Toast;
 import com.example.weerapp.R;
 import com.example.weerapp.api.OnGetWeerObjectCallback;
 import com.example.weerapp.api.WeerObjectenRepository;
-import com.example.weerapp.model.Main;
 import com.example.weerapp.model.WeerObject;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,6 +43,8 @@ public class StadInvoeren extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final String TAG = "StadInvoeren";
+    private static final int TEMPERATUUR_VOOR_KORTE_BROEK = 20;
+    public static final String WEEROBJECT= "weerobject";
     EditText editTextStad;
     String tekstStad;
     LocationManager locationManager;
@@ -49,7 +52,6 @@ public class StadInvoeren extends AppCompatActivity {
     Double latitude;
     Double longitude;
     private WeerObjectenRepository weerObjectenRepository;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,9 @@ public class StadInvoeren extends AppCompatActivity {
         tekstStad = editTextStad.getText().toString();
 
         weerObjectenRepository = WeerObjectenRepository.getInstance();
+
+        latitude = null;
+        longitude= null;
 
     }
 
@@ -132,7 +137,8 @@ public class StadInvoeren extends AppCompatActivity {
             }
         } else
         // Permission has already been granted
-            { locatieBepalen();
+        {
+            locatieBepalen();
         }
     }
 
@@ -160,43 +166,44 @@ public class StadInvoeren extends AppCompatActivity {
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
 
-                final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-                if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-                    showAlertGeenGPS();
+            final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showAlertGeenGPS();
+            }
+
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+            locationListener = new LocationListener() {
+                public void onLocationChanged(Location location) {
+                    if (location != null) {
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+
+                        // stoppen met GPS gebruiken
+                        locationManager.removeUpdates(locationListener);
+
+                        stadBepalen();
+                    } else {
+                        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                            Toast.makeText(StadInvoeren.this, "Geen locatie gevonden", Toast.LENGTH_LONG).show();
+                    }
                 }
 
-                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                }
 
-                locationListener = new LocationListener() {
-                    public void onLocationChanged(Location location) {
-                        if (location != null) {
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
+                public void onProviderEnabled(String provider) {
+                }
 
-                            // stoppen met GPS gebruiken
-                            locationManager.removeUpdates(locationListener);
+                public void onProviderDisabled(String provider) {
+                }
+            };
 
-                            stadBepalen();
-                        }
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
-                        else {
-                            if(manager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
-                                Toast.makeText(StadInvoeren.this, "Geen locatie gevonden", Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-                    public void onProviderEnabled(String provider) {}
-
-                    public void onProviderDisabled(String provider) {}
-                };
-
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-            }
         }
+    }
 
     public void uitloggen() {
         Toast.makeText(StadInvoeren.this, "Gebruiker met emailadres " +
@@ -265,9 +272,17 @@ public class StadInvoeren extends AppCompatActivity {
         }
     }
 
-    public void controleren(View view) {
+    public void temperatuurOphalen(View view) {
 
-        if (latitude == null && longitude == null && (!TextUtils.isEmpty(tekstStad))) {
+        tekstStad = editTextStad.getText().toString();
+
+        if((!TextUtils.isEmpty(tekstStad)))
+            resultaatOpBasisVanStadNaam(tekstStad);
+            else
+        Toast.makeText(StadInvoeren.this,
+                "Voer een stad in of gebruik GPS om locatie te bepalen", Toast.LENGTH_LONG).show();
+
+        /*if (latitude == null && longitude == null && (!TextUtils.isEmpty(tekstStad))) {
             resultaatOpBasisVanStadNaam(tekstStad);
 
         } else if (latitude != null && longitude != null) {
@@ -276,21 +291,32 @@ public class StadInvoeren extends AppCompatActivity {
         } else {
             Toast.makeText(StadInvoeren.this,
                     "Voer een stad in of gebruik GPS om locatie te bepalen", Toast.LENGTH_LONG).show();
-        }
+        }*/
 
-        }
+    }
 
     public void resultaatOpBasisVanStadNaam(String stadNaam) {
 
-        weerObjectenRepository.getWeerObjectfromStadNaam(tekstStad, new OnGetWeerObjectCallback() {
+        weerObjectenRepository.getWeerObjectfromStadNaam(stadNaam, new OnGetWeerObjectCallback() {
             @Override
             public void onSuccess(WeerObject weerObject) {
-                Toast.makeText(StadInvoeren.this, "" + weerObject.getMain().getTemp(), Toast.LENGTH_LONG).show();
+
+                datumToevoegen(weerObject);
+                tekstStad = editTextStad.getText().toString();
+                String naamStadHoofdletter = tekstStad.substring(0, 1).toUpperCase() + tekstStad.substring(1);
+                weerObject.setNaamStad(naamStadHoofdletter);
+
+                if (weerObject.getMain().getTemp() >= TEMPERATUUR_VOOR_KORTE_BROEK) {
+                    naarSchermKorteBroek(weerObject);
+                } else {
+                    naarSchermGeenKorteBroek(weerObject);
+                }
             }
 
             @Override
             public void onError() {
-
+                Toast.makeText(StadInvoeren.this,
+                        "Controleer of de naam van de stad juist is", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -300,13 +326,45 @@ public class StadInvoeren extends AppCompatActivity {
         weerObjectenRepository.getWeerObjectfromCoordinaten(latitude, longitude, new OnGetWeerObjectCallback() {
             @Override
             public void onSuccess(WeerObject weerObject) {
-                Toast.makeText(StadInvoeren.this, "" + weerObject.getMain().getTemp(), Toast.LENGTH_LONG).show();
+
+                datumToevoegen(weerObject);
+                tekstStad = editTextStad.getText().toString();
+                String naamStadHoofdletter = tekstStad.substring(0, 1).toUpperCase() + tekstStad.substring(1);
+                weerObject.setNaamStad(naamStadHoofdletter);
+
+                if (weerObject.getMain().getTemp() >= TEMPERATUUR_VOOR_KORTE_BROEK) {
+                    naarSchermKorteBroek(weerObject);
+                } else {
+                    naarSchermGeenKorteBroek(weerObject);
+                }
             }
 
             @Override
             public void onError() {
-
+                Toast.makeText(StadInvoeren.this,
+                        "Er ging iets niet goed", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void datumToevoegen(WeerObject weerObject) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        String datum = formatter.format(date);
+
+        weerObject.setDatum(datum);
+    }
+
+    public void naarSchermKorteBroek(WeerObject weerObject) {
+        Intent intent = new Intent(StadInvoeren.this, KorteBroek.class);
+        intent.putExtra(WEEROBJECT, weerObject);
+        startActivity(intent);
+
+    }
+
+    public void naarSchermGeenKorteBroek(WeerObject weerObject) {
+        Intent intent = new Intent(StadInvoeren.this, GeenKorteBroek.class);
+        intent.putExtra(WEEROBJECT, weerObject);
+        startActivity(intent);
     }
 }

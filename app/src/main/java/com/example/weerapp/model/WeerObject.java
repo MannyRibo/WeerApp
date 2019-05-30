@@ -26,10 +26,15 @@ public class WeerObject implements Parcelable {
     @Expose
     private String datum;
 
-    public WeerObject(Main main, String datum) {
-        this.id = id;
+    @ColumnInfo
+    @SerializedName("naamStad")
+    @Expose
+    private String naamStad;
+
+    public WeerObject(Main main, String datum, String naamStad) {
         this.main = main;
         this.datum = datum;
+        this.naamStad = naamStad;
     }
 
     public Long getId() {
@@ -48,6 +53,12 @@ public class WeerObject implements Parcelable {
         this.datum = datum;
     }
 
+    public String getNaamStad() {
+        return naamStad;
+    }
+
+    public void setNaamStad(String naamstad) { this.naamStad = naamstad; }
+
     public Main getMain() {
         return main;
     }
@@ -64,6 +75,7 @@ public class WeerObject implements Parcelable {
         }
         main = in.readParcelable(Main.class.getClassLoader());
         datum = in.readString();
+        naamStad = in.readString();
     }
 
     public static final Creator<WeerObject> CREATOR = new Creator<WeerObject>() {
@@ -77,7 +89,6 @@ public class WeerObject implements Parcelable {
             return new WeerObject[size];
         }
     };
-
     @Override
     public int describeContents() {
         return 0;
@@ -85,7 +96,6 @@ public class WeerObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
         if (id == null) {
             dest.writeByte((byte) 0);
         } else {
@@ -94,6 +104,6 @@ public class WeerObject implements Parcelable {
         }
         dest.writeParcelable(main, flags);
         dest.writeString(datum);
+        dest.writeString(naamStad);
     }
-
 }
