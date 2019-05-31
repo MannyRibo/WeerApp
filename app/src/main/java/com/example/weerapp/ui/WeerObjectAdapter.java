@@ -2,6 +2,7 @@ package com.example.weerapp.ui;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +26,9 @@ public class WeerObjectAdapter extends RecyclerView.Adapter<WeerObjectAdapter.Vi
     @Override
     public WeerObjectAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         Context context = viewGroup.getContext();
+
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.custom_layout, null);
+        View view = inflater.inflate(R.layout.custom_layout, viewGroup, false);
         // Return a new holder instance
         WeerObjectAdapter.ViewHolder viewHolder = new WeerObjectAdapter.ViewHolder(view);
         return viewHolder;
@@ -36,7 +38,7 @@ public class WeerObjectAdapter extends RecyclerView.Adapter<WeerObjectAdapter.Vi
     public void onBindViewHolder(@NonNull WeerObjectAdapter.ViewHolder viewHolder, int i) {
         WeerObject weerobject = mWeerObjects.get(i);
         viewHolder.naamStad.setText(weerobject.getNaamStad());
-        viewHolder.aantalgraden.setText("" + weerobject.getMain().getTemp() + "°C");
+        viewHolder.aantalgraden.setText(weerobject.getMain().getTemp() + "°C");
         viewHolder.datum.setText(weerobject.getDatum());
 
     }
@@ -55,6 +57,7 @@ public class WeerObjectAdapter extends RecyclerView.Adapter<WeerObjectAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView naamStad;
         TextView aantalgraden;
         TextView datum;

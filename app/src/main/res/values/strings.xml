@@ -5,4 +5,8 @@
     <string name="scherm_geenkortebroek">Geen weer voor een korte broek</string>
     <string name="scherm_kortebroek">Weer voor een korte broek</string>
     <string name="scherm_locatiebepalen">Locatie bepalen</string>
+    <string name="weervoorkortebroek">Het is weer voor een korte broek!</string>
+    <string name="geenweervoorkortebroek">Het is geen weer voor een korte broek!</string>
+    <string name="hetis">Het is </string>
+    <string name="gradenin">°C in </string>
 </resources>

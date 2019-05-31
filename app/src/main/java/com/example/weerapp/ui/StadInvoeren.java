@@ -1,6 +1,7 @@
 package com.example.weerapp.ui;
 
 import android.Manifest;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,6 +36,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +48,7 @@ public class StadInvoeren extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final String TAG = "StadInvoeren";
-    private static final int TEMPERATUUR_VOOR_KORTE_BROEK = 20;
+    private static final int TEMPERATUUR_VOOR_KORTE_BROEK = 18;
     public static final String WEEROBJECT= "weerobject";
     EditText editTextStad;
     String tekstStad;
@@ -57,11 +59,14 @@ public class StadInvoeren extends AppCompatActivity {
     private WeerObjectenRepository weerObjectenRepository;
     private WeerObjectRoomDatabase db;
     private Executor executor = Executors.newSingleThreadExecutor();
+    private WeerViewModel mWeerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stad_invoeren);
+
+        mWeerViewModel = ViewModelProviders.of(this).get(WeerViewModel.class);
 
         db = WeerObjectRoomDatabase.getDatabase(this);
 
@@ -309,11 +314,10 @@ public class StadInvoeren extends AppCompatActivity {
             public void onSuccess(WeerObject weerObject) {
 
                 datumToevoegen(weerObject);
-                tekstStad = editTextStad.getText().toString();
-                String naamStadHoofdletter = tekstStad.substring(0, 1).toUpperCase() + tekstStad.substring(1);
-                weerObject.setNaamStad(naamStadHoofdletter);
+                naamStadNaarHoofdletter(weerObject);
+                temperatuurAfronden(weerObject);
 
-                insertWeerObject(weerObject);
+                mWeerViewModel.insert(weerObject);
 
                 if (weerObject.getMain().getTemp() >= TEMPERATUUR_VOOR_KORTE_BROEK) {
                     naarSchermKorteBroek(weerObject);
@@ -337,11 +341,10 @@ public class StadInvoeren extends AppCompatActivity {
             public void onSuccess(WeerObject weerObject) {
 
                 datumToevoegen(weerObject);
-                tekstStad = editTextStad.getText().toString();
-                String naamStadHoofdletter = tekstStad.substring(0, 1).toUpperCase() + tekstStad.substring(1);
-                weerObject.setNaamStad(naamStadHoofdletter);
+                naamStadNaarHoofdletter(weerObject);
+                temperatuurAfronden(weerObject);
 
-                insertWeerObject(weerObject);
+                mWeerViewModel.insert(weerObject);
 
                 if (weerObject.getMain().getTemp() >= TEMPERATUUR_VOOR_KORTE_BROEK) {
                     naarSchermKorteBroek(weerObject);
@@ -366,6 +369,29 @@ public class StadInvoeren extends AppCompatActivity {
         weerObject.setDatum(datum);
     }
 
+    public void naamStadNaarHoofdletter(WeerObject weerObject) {
+        tekstStad = editTextStad.getText().toString();
+
+        // String naamStadHoofdletter = tekstStad.substring(0, 1).toUpperCase() + tekstStad.substring(1);
+
+        tekstStad.trim();
+        String[] arr = tekstStad.split(" ");
+        StringBuffer sb = new StringBuffer();
+
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(Character.toUpperCase(arr[i].charAt(0)))
+                    .append(arr[i].substring(1)).append(" ");
+        }
+        String naamStadHoofdletter = sb.toString().trim();
+
+        weerObject.setNaamStad(naamStadHoofdletter);
+    }
+
+    public void temperatuurAfronden(WeerObject weerObject) {
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        weerObject.getMain().setTemp(Double.parseDouble(decimalFormat.format(weerObject.getMain().getTemp())));
+    }
+
     public void naarSchermKorteBroek(WeerObject weerObject) {
         Intent intent = new Intent(StadInvoeren.this, KorteBroek.class);
         intent.putExtra(WEEROBJECT, weerObject);
@@ -379,12 +405,4 @@ public class StadInvoeren extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void insertWeerObject(final WeerObject weerObject) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                db.weerObjectDao().insertWeerObject(weerObject);
-            }
-        });
-    }
 }
