@@ -59,7 +59,7 @@ public class Registreren extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // Controleren of gebruiker is ingelogd (niet null) en UI updaten
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             updateUI(currentUser);
@@ -71,7 +71,6 @@ public class Registreren extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registreren);
 
-        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
         nieuwEmailadres = findViewById(R.id.emailadresregisteren);
@@ -79,6 +78,11 @@ public class Registreren extends AppCompatActivity {
         registreerbtn = findViewById(R.id.registreerbtn);
     }
 
+    /**
+     * Deze methode zorgt ervoor dat er naar het volgende scherm wordt genavigeerd
+     * als er een gebruiker succesvol is ingelogd
+     * @param currentUser is de gebruiker die momenteel is ingelogd
+     */
     public void updateUI(FirebaseUser currentUser) {
         Toast.makeText(Registreren.this, "Gebruiker geregistreerd met e-mailadres " +
                 currentUser.getEmail(), Toast.LENGTH_LONG).show();
@@ -86,10 +90,16 @@ public class Registreren extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Deze methode zorgt ervoor dat een gebruiker op basis van
+     * emailadres en wachtwoord wordt geregistreerd
+     * @param view is de view (button) waar op geklikt wordt om deze methode aan te roepen
+     */
     public void registreren(View view) {
         String emailadres = nieuwEmailadres.getText().toString();
         String wachtwoord = nieuwWachtwoord.getText().toString();
 
+        // als emailadres en wachtwoord niet zijn ingevuld melding geven
         if ((TextUtils.isEmpty(emailadres)) || (TextUtils.isEmpty(wachtwoord))) {
             // If sign in fails, display a message to the user.
             Toast.makeText(Registreren.this,
@@ -101,7 +111,7 @@ public class Registreren extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
+                                // inloggen gelukt. UI updaten.
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
                             }

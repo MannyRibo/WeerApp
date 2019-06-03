@@ -37,8 +37,10 @@ public class WeerGeschiedenis extends AppCompatActivity implements RecyclerView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weer_geschiedenis);
 
+        // back button weergeven
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // nieuwe mediaplayer om geluid af te spelen bij verwijderen van items in de recyclerview
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.caseclosed);
 
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -65,16 +67,15 @@ public class WeerGeschiedenis extends AppCompatActivity implements RecyclerView.
                         return false;
                     }
 
-                    //Called when a user swipes left or right on a ViewHolder
+                    // Methode die wordt aangeroepen als een item in de recyclerview wordt geswiped
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                        //Get the index corresponding to the selected position
+
                         int position = (viewHolder.getAdapterPosition());
                         mWeerViewModel.delete(mWeerObjects.get(position));
                         mWeerObjects.remove(position);
                         mAdapter.notifyItemRemoved(position);
 
-                        //geluid bij swipen
                         mediaPlayer.start();
                     }
 
@@ -96,12 +97,10 @@ public class WeerGeschiedenis extends AppCompatActivity implements RecyclerView.
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_geschiedenis, menu);
         return true;
     }
 
-    // alle objecten verwijderen door op prullenbak te klikken
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.verwijderen) {
@@ -109,7 +108,6 @@ public class WeerGeschiedenis extends AppCompatActivity implements RecyclerView.
                 Toast.makeText(WeerGeschiedenis.this, "Er zijn geen items om te verwijderen", Toast.LENGTH_LONG).show();
             }
             else {
-
                 mWeerViewModel.deleteAll();
                 mediaPlayer.start();
             }

@@ -57,8 +57,6 @@ public class StadInvoeren extends AppCompatActivity {
     Double latitude;
     Double longitude;
     private WeerObjectenRepository weerObjectenRepository;
-    private WeerObjectRoomDatabase db;
-    private Executor executor = Executors.newSingleThreadExecutor();
     private WeerViewModel mWeerViewModel;
 
     @Override
@@ -67,8 +65,6 @@ public class StadInvoeren extends AppCompatActivity {
         setContentView(R.layout.activity_stad_invoeren);
 
         mWeerViewModel = ViewModelProviders.of(this).get(WeerViewModel.class);
-
-        db = WeerObjectRoomDatabase.getDatabase(this);
 
         editTextStad = findViewById(R.id.editTextStad);
         tekstStad = editTextStad.getText().toString();
@@ -109,14 +105,18 @@ public class StadInvoeren extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Deze methode controleert of er toestemming is om GPS te gebruiken
+     * @param view is de view (button) waar op geklikt wordt om deze methode aan te roepen
+     */
     public void checkPermissies(final View view) {
 
         if (ContextCompat.checkSelfPermission(StadInvoeren.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            // Permission is not granted
-            // Show alert that gps is needed
+            // Toestemming is geweigerd
+            // Alertdialog weergeven om GPS toestemming te vragen
             if (ActivityCompat.shouldShowRequestPermissionRationale(StadInvoeren.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
 
@@ -142,18 +142,22 @@ public class StadInvoeren extends AppCompatActivity {
                         .show();
 
             } else {
-                // No explanation needed; request the permission
+                // vragen om toestemming
                 ActivityCompat.requestPermissions(StadInvoeren.this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             }
         } else
-        // Permission has already been granted
+        // toestemming is gegeven
         {
             locatieBepalen();
         }
     }
 
+
+    /**
+     * Deze methode geeft een alertdialog weer om aan te geven dat GPS moet worden ingeschakeld
+     */
     public void showAlertGeenGPS() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Het lijkt erop dat GPS is uitgeschakeld, wil je GPS nu inschakelen?")
@@ -173,11 +177,16 @@ public class StadInvoeren extends AppCompatActivity {
         alert.show();
     }
 
+    /**
+     * Deze methode zorgt ervoor dat er een locatie wordt opgehaald
+     * De lengte- en breedtegraad van deze locatie wordt vervolgens opgeslagen in twee variabelen
+     */
     public void locatieBepalen() {
         if (ContextCompat.checkSelfPermission(StadInvoeren.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
 
+            // als GPS is uitgeschakeld vragen deze aan te zetten
             final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 showAlertGeenGPS();
@@ -217,6 +226,9 @@ public class StadInvoeren extends AppCompatActivity {
         }
     }
 
+    /**
+     * Deze methode zorgt ervoor dat een gebruiker wordt uitgelogd
+     */
     public void uitloggen() {
         Toast.makeText(StadInvoeren.this, "Gebruiker met emailadres " +
                         FirebaseAuth.getInstance().getCurrentUser().getEmail() + " is uitgelogd"
@@ -227,6 +239,9 @@ public class StadInvoeren extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Deze methode zorgt ervoor dat er een reset e-mail wordt gestuurd naar de gebruiker
+     */
     public void wachtwoordResetten() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         final String emailAddress = auth.getCurrentUser().getEmail();
@@ -246,6 +261,9 @@ public class StadInvoeren extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Deze methode zorgt ervoor dat de applicatie wordt afgesloten
+     */
     public void afsluiten() {
         new AlertDialog.Builder(this)
                 .setTitle("Afsluiten")
@@ -261,11 +279,18 @@ public class StadInvoeren extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Deze methode zorgt ervoor dat er wordt genavigeerd naar de geschiedenis activity
+     */
     public void naarGeschiedenis() {
         Intent intent = new Intent(StadInvoeren.this, WeerGeschiedenis.class);
         startActivity(intent);
     }
 
+    /**
+     * Deze methode levert op basis van de eerder opgehaalde lengte- en breedtegraad
+     * een stadnaam en vult deze in in de editText op het scherm
+     */
     public void stadBepalen() {
 
         try {
@@ -284,6 +309,11 @@ public class StadInvoeren extends AppCompatActivity {
         }
     }
 
+    /**
+     * Deze methode kijkt of de GPS functie is gebruikt of dat er handmatig een stadnaam is ingevuld
+     * en roept vervolgens de juiste methode aan die de juiste API call uitvoert
+     * @param view is de view (button) waar op geklikt wordt om deze methode aan te roepen
+     */
     public void temperatuurOphalen(View view) {
 
         tekstStad = editTextStad.getText().toString();
@@ -307,6 +337,13 @@ public class StadInvoeren extends AppCompatActivity {
 
     }
 
+    /**
+     * Deze methode voert een API call uit op basis van stadnaam en krijgt een weerobject terug
+     * Vervolgens wordt de huidige datum toegevoegd, de stadnaam in de juiste format gezet en de
+     * temperatuur wordt afgerond op 1 decimaal
+     * Uiteindelijk wordt op basis van de temperatuur naar de ene of andere activity genavigeerd
+     * @param stadNaam is de naam van de stad die is ingevoerd door de gebruiker
+     */
     public void resultaatOpBasisVanStadNaam(String stadNaam) {
 
         weerObjectenRepository.getWeerObjectfromStadNaam(stadNaam, new OnGetWeerObjectCallback() {
@@ -335,6 +372,14 @@ public class StadInvoeren extends AppCompatActivity {
 
     }
 
+    /**
+     * Deze methode voert een API call uit op basis van lengte- en breedtegraad en krijgt een weerobject terug
+     * Vervolgens wordt de huidige datum toegevoegd, de stadnaam in de juiste format gezet en de
+     * temperatuur wordt afgerond op 1 decimaal
+     * Uiteindelijk wordt op basis van de temperatuur naar de ene of andere activity genavigeerd
+     * @param latitude is de breedtegraad die door de GPS is geleverd
+     * @param longitude is de lengtegraad die door de GPS is geleverd
+     */
     public void resultaatOpBasisVanCoordinaten(Double latitude, Double longitude) {
         weerObjectenRepository.getWeerObjectfromCoordinaten(latitude, longitude, new OnGetWeerObjectCallback() {
             @Override
@@ -356,11 +401,15 @@ public class StadInvoeren extends AppCompatActivity {
             @Override
             public void onError() {
                 Toast.makeText(StadInvoeren.this,
-                        "Er ging iets niet goed", Toast.LENGTH_LONG).show();
+                        "Er ging iets niet goed bij het ophalen van het weer", Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    /**
+     * Deze methode voegt de huidige datum toe aan het weerobject
+     * @param weerObject is het weerobject verkregen van de API call
+     */
     public void datumToevoegen(WeerObject weerObject) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date date = new Date();
@@ -369,10 +418,13 @@ public class StadInvoeren extends AppCompatActivity {
         weerObject.setDatum(datum);
     }
 
+    /**
+     * Deze methode zorgt ervoor dat de stadnaam in de juiste format wordt opgeslagen in het weerobject
+     * voor een goede weergave in de volgende activity en de recyclerview
+     * @param weerObject is het weerobject verkregen van de API call
+     */
     public void naamStadNaarHoofdletter(WeerObject weerObject) {
         tekstStad = editTextStad.getText().toString();
-
-        // String naamStadHoofdletter = tekstStad.substring(0, 1).toUpperCase() + tekstStad.substring(1);
 
         tekstStad.trim();
         String[] arr = tekstStad.split(" ");
@@ -387,11 +439,21 @@ public class StadInvoeren extends AppCompatActivity {
         weerObject.setNaamStad(naamStadHoofdletter);
     }
 
+    /**
+     * Deze methode zorgt ervoor dat de temperatuur opgeslagen in het weerobject wordt afgerond naar
+     * 1 decimaal voor een nettere weergave
+     * @param weerObject is het weerobject verkregen van de API call
+     */
     public void temperatuurAfronden(WeerObject weerObject) {
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
         weerObject.getMain().setTemp(Double.parseDouble(decimalFormat.format(weerObject.getMain().getTemp())));
     }
 
+    /**
+     * Deze methode zorgt ervoor dat de korte broek activity wordt gestart
+     * @param weerObject is het weerobject waar de temperatuur wordt uitgehaald in de volgende
+     *                   activity
+     */
     public void naarSchermKorteBroek(WeerObject weerObject) {
         Intent intent = new Intent(StadInvoeren.this, KorteBroek.class);
         intent.putExtra(WEEROBJECT, weerObject);
@@ -399,6 +461,11 @@ public class StadInvoeren extends AppCompatActivity {
 
     }
 
+    /**
+     * Deze methode zorgt ervoor dat de geen korte broek activity wordt gestart
+     * @param weerObject is het weerobject waar de temperatuur wordt uitgehaald in de volgende
+     *                   activity
+     */
     public void naarSchermGeenKorteBroek(WeerObject weerObject) {
         Intent intent = new Intent(StadInvoeren.this, GeenKorteBroek.class);
         intent.putExtra(WEEROBJECT, weerObject);

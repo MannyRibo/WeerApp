@@ -29,7 +29,7 @@ public class WeerObjectAdapter extends RecyclerView.Adapter<WeerObjectAdapter.Vi
 
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.custom_layout, viewGroup, false);
-        // Return a new holder instance
+
         WeerObjectAdapter.ViewHolder viewHolder = new WeerObjectAdapter.ViewHolder(view);
         return viewHolder;
     }
@@ -51,7 +51,6 @@ public class WeerObjectAdapter extends RecyclerView.Adapter<WeerObjectAdapter.Vi
     public void swapList(List<WeerObject> newList) {
         mWeerObjects = newList;
         if (newList != null) {
-            // Force the RecyclerView to refresh
             this.notifyDataSetChanged();
         }
     }

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Controleren of gebruiker is ingelogd (niet null) en UI updaten.
+        // Controleren of gebruiker is ingelogd (niet null) en UI updaten
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             updateUI(currentUser);
