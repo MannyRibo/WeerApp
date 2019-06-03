@@ -24,6 +24,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import maes.tech.intentanim.CustomIntent;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 currentUser.getEmail(), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(MainActivity.this, StadInvoeren.class);
         startActivity(intent);
+        CustomIntent.customType(MainActivity.this, "left-to-right");
     }
 
 
@@ -125,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
     public void naarRegistreren(View view) {
         Intent intent = new Intent(MainActivity.this, Registreren.class);
         startActivity(intent);
+        CustomIntent.customType(MainActivity.this, "left-to-right");
     }
 
     /**

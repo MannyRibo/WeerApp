@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import maes.tech.intentanim.CustomIntent;
 
 import com.example.weerapp.R;
 import com.example.weerapp.api.OnGetWeerObjectCallback;
@@ -237,6 +238,7 @@ public class StadInvoeren extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(StadInvoeren.this, MainActivity.class);
         startActivity(intent);
+        CustomIntent.customType(StadInvoeren.this, "left-to-right");
     }
 
     /**
@@ -285,6 +287,7 @@ public class StadInvoeren extends AppCompatActivity {
     public void naarGeschiedenis() {
         Intent intent = new Intent(StadInvoeren.this, WeerGeschiedenis.class);
         startActivity(intent);
+        CustomIntent.customType(StadInvoeren.this, "left-to-right");
     }
 
     /**
@@ -458,7 +461,7 @@ public class StadInvoeren extends AppCompatActivity {
         Intent intent = new Intent(StadInvoeren.this, KorteBroek.class);
         intent.putExtra(WEEROBJECT, weerObject);
         startActivity(intent);
-
+        CustomIntent.customType(StadInvoeren.this, "left-to-right");
     }
 
     /**
@@ -470,6 +473,7 @@ public class StadInvoeren extends AppCompatActivity {
         Intent intent = new Intent(StadInvoeren.this, GeenKorteBroek.class);
         intent.putExtra(WEEROBJECT, weerObject);
         startActivity(intent);
+        CustomIntent.customType(StadInvoeren.this, "left-to-right");
     }
 
 }
