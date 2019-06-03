@@ -72,9 +72,6 @@ public class StadInvoeren extends AppCompatActivity {
 
         weerObjectenRepository = WeerObjectenRepository.getInstance();
 
-        latitude = null;
-        longitude= null;
-
     }
 
     @Override
@@ -212,19 +209,22 @@ public class StadInvoeren extends AppCompatActivity {
                 }
 
                 public void onStatusChanged(String provider, int status, Bundle extras) {
+                    // stoppen met GPS gebruiken
+                    locationManager.removeUpdates(locationListener);
                 }
 
                 public void onProviderEnabled(String provider) {
                 }
 
                 public void onProviderDisabled(String provider) {
+                    // stoppen met GPS gebruiken
+                    locationManager.removeUpdates(locationListener);
                 }
             };
-
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
         }
+
     }
 
     /**
@@ -448,8 +448,15 @@ public class StadInvoeren extends AppCompatActivity {
      * @param weerObject is het weerobject verkregen van de API call
      */
     public void temperatuurAfronden(WeerObject weerObject) {
-        DecimalFormat decimalFormat = new DecimalFormat("#.#");
-        weerObject.getMain().setTemp(Double.parseDouble(decimalFormat.format(weerObject.getMain().getTemp())));
+        /*DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        weerObject.getMain().setTemp(Double.parseDouble(decimalFormat.format(weerObject.getMain().getTemp())));*/
+
+        double tweeDecimaalTemperatuur = weerObject.getMain().getTemp();
+
+        double eenDecimaalTemperatuur = Math.round(tweeDecimaalTemperatuur * 10) / 10.0;
+
+        weerObject.getMain().setTemp(eenDecimaalTemperatuur);
+
     }
 
     /**
