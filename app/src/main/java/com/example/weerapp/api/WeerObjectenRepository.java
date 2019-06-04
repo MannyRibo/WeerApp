@@ -1,5 +1,6 @@
 package com.example.weerapp.api;
 
+import com.example.weerapp.BuildConfig;
 import com.example.weerapp.model.WeerObject;
 
 import retrofit2.Call;
@@ -11,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class WeerObjectenRepository {
 
     private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/weather/";
-    private static final String API_KEY = "08b896635645c7bde3960fee48572b9c";
+    private static final String API_KEY = BuildConfig.ApiKey;
     private static final String UNITS = "metric";
 
     private static WeerObjectenRepository repository;
