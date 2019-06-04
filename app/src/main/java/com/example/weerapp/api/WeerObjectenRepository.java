@@ -47,7 +47,7 @@ public class WeerObjectenRepository {
 
                             // random long genereren en meegeven aan het object
                             long leftLimit = 1L;
-                            long rightLimit = 10L;
+                            long rightLimit = 1000000L;
                             long generatedLong = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
 
                             data.setId(generatedLong);
