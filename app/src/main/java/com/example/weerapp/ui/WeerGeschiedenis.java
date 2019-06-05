@@ -22,6 +22,7 @@ import com.example.weerapp.R;
 import com.example.weerapp.model.WeerObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class WeerGeschiedenis extends AppCompatActivity implements RecyclerView.OnItemTouchListener {
@@ -55,6 +56,8 @@ public class WeerGeschiedenis extends AppCompatActivity implements RecyclerView.
             @Override
             public void onChanged(@Nullable List<WeerObject> weerObjects) {
                 mWeerObjects = weerObjects;
+                // reverse arraylist zodat sortering nieuw -> oud is
+                Collections.reverse(mWeerObjects);
                 updateUI();
             }
 

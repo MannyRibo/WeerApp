@@ -24,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import maes.tech.intentanim.CustomIntent;
 
@@ -52,6 +53,7 @@ public class StadInvoeren extends AppCompatActivity {
     private static final int TEMPERATUUR_VOOR_KORTE_BROEK = 18;
     public static final String WEEROBJECT= "weerobject";
     EditText editTextStad;
+    TextView textViewAdres;
     String tekstStad;
     LocationManager locationManager;
     LocationListener locationListener;
@@ -69,6 +71,8 @@ public class StadInvoeren extends AppCompatActivity {
 
         editTextStad = findViewById(R.id.editTextStad);
         tekstStad = editTextStad.getText().toString();
+
+        textViewAdres = findViewById(R.id.adres);
 
         weerObjectenRepository = WeerObjectenRepository.getInstance();
 
@@ -305,6 +309,8 @@ public class StadInvoeren extends AppCompatActivity {
             } else {
                 if (addresses.size() > 0) {
                     editTextStad.setText(addresses.get(0).getLocality());
+
+                    textViewAdres.setText(addresses.get(0).getAddressLine(0));
                 }
             }
         } catch (IOException e) {

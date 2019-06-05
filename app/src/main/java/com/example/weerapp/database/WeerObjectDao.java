@@ -18,7 +18,7 @@ public interface WeerObjectDao {
     @Query("SELECT * FROM weerobject")
     LiveData<List<WeerObject>> getAllWeerObjects();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     void insertWeerObject(WeerObject weerobject);
 
     @Delete

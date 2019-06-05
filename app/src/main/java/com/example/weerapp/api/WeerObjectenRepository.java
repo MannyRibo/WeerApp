@@ -18,6 +18,7 @@ public class WeerObjectenRepository {
     private static WeerObjectenRepository repository;
 
     private WeerAPI api;
+    private Long counter = 1L;
 
     private WeerObjectenRepository(WeerAPI api) {
         this.api = api;
@@ -43,17 +44,15 @@ public class WeerObjectenRepository {
                     public void onResponse(Call<WeerObject> call, Response<WeerObject> response) {
                         if (response.isSuccessful()) {
 
-                            WeerObject data = response.body();
-
-                            // random long genereren en meegeven aan het object
-                            long leftLimit = 1L;
-                            long rightLimit = 1000000L;
-                            long generatedLong = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
-
-                            data.setId(generatedLong);
-
+                           WeerObject data = response.body();
 
                         if (data != null) {
+
+                            // handmatige auto increment omdat room anders not unique primare key
+                            // exception gooit
+                            data.setId(counter);
+                            counter++;
+
                                 callback.onSuccess(data);
                             } else {
                                 callback.onError();
