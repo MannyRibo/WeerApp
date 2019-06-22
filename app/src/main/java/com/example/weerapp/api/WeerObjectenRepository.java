@@ -2,6 +2,7 @@ package com.example.weerapp.api;
 
 import com.example.weerapp.BuildConfig;
 import com.example.weerapp.model.WeerObject;
+import com.example.weerapp.ui.WeerViewModel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,7 +19,6 @@ public class WeerObjectenRepository {
     private static WeerObjectenRepository repository;
 
     private WeerAPI api;
-    private Long counter = 1L;
 
     private WeerObjectenRepository(WeerAPI api) {
         this.api = api;
@@ -47,11 +47,6 @@ public class WeerObjectenRepository {
                            WeerObject data = response.body();
 
                         if (data != null) {
-
-                            // handmatige auto increment omdat room anders not unique primare key
-                            // exception gooit
-                            data.setId(counter);
-                            counter++;
 
                                 callback.onSuccess(data);
                             } else {

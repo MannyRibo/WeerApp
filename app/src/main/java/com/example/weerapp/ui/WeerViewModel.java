@@ -15,10 +15,13 @@ public class WeerViewModel extends AndroidViewModel {
 
     private LiveData<List<WeerObject>> mWeerobjects;
 
+    private LiveData<Integer> rowCount;
+
     public WeerViewModel(@NonNull Application application) {
         super(application);
         mRepository = new WeerObjectRepository(application.getApplicationContext());
         mWeerobjects = mRepository.getAllWeerObjects();
+        rowCount = mRepository.getRowCount();
     }
 
     public LiveData<List<WeerObject>> getWeerObjects() {
@@ -38,5 +41,9 @@ public class WeerViewModel extends AndroidViewModel {
 
     public void deleteAll() {
         mRepository.deleteAll(); }
+
+    public LiveData<Integer> getRowCount() {
+        return rowCount;
+    }
 
     }

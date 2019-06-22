@@ -19,6 +19,8 @@ public class WeerObjectRepository {
 
     private LiveData<List<WeerObject>> mWeerObjects;
 
+    private LiveData<Integer> rowCount;
+
     private Executor mExecutor = Executors.newSingleThreadExecutor();
 
     public WeerObjectRepository (Context context) {
@@ -28,6 +30,8 @@ public class WeerObjectRepository {
         mWeerObjectDao = mAppDatabase.weerObjectDao();
 
         mWeerObjects = mWeerObjectDao.getAllWeerObjects();
+
+        rowCount = mWeerObjectDao.getRowCount();
 
     }
 
@@ -80,5 +84,9 @@ public class WeerObjectRepository {
                 mWeerObjectDao.deleteAll();
             }
         });
+    }
+
+    public LiveData<Integer> getRowCount() {
+        return rowCount;
     }
 }

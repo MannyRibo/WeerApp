@@ -1,6 +1,7 @@
 package com.example.weerapp.ui;
 
 import android.Manifest;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -40,6 +42,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -61,6 +64,7 @@ public class StadInvoeren extends AppCompatActivity {
     Double longitude;
     private WeerObjectenRepository weerObjectenRepository;
     private WeerViewModel mWeerViewModel;
+    private Integer rowCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,14 @@ public class StadInvoeren extends AppCompatActivity {
         setContentView(R.layout.activity_stad_invoeren);
 
         mWeerViewModel = ViewModelProviders.of(this).get(WeerViewModel.class);
+        mWeerViewModel.getRowCount().observe(this, new Observer<Integer>() {
+
+            @Override
+            public void onChanged(@Nullable Integer newRowCount) {
+                rowCount = newRowCount;
+            }
+
+        });
 
         editTextStad = findViewById(R.id.editTextStad);
         tekstStad = editTextStad.getText().toString();
@@ -363,6 +375,11 @@ public class StadInvoeren extends AppCompatActivity {
                 naamStadNaarHoofdletter(weerObject);
                 temperatuurAfronden(weerObject);
 
+                // handmatige auto increment omdat room anders not unique primary key
+                // exception gooit
+                Long nieuweID = new Long(rowCount);
+                weerObject.setId(nieuweID + 1);
+
                 mWeerViewModel.insert(weerObject);
 
                 if (weerObject.getMain().getTemp() >= TEMPERATUUR_VOOR_KORTE_BROEK) {
@@ -397,6 +414,11 @@ public class StadInvoeren extends AppCompatActivity {
                 datumToevoegen(weerObject);
                 naamStadNaarHoofdletter(weerObject);
                 temperatuurAfronden(weerObject);
+
+                // handmatige auto increment omdat room anders not unique primary key
+                // exception gooit
+                Long nieuweID = new Long(rowCount);
+                weerObject.setId(nieuweID + 1);
 
                 mWeerViewModel.insert(weerObject);
 

@@ -29,4 +29,7 @@ public interface WeerObjectDao {
 
     @Update
     void updateWeerObject(WeerObject weerobject);
+
+    @Query("SELECT COUNT(id) FROM weerobject")
+    LiveData<Integer> getRowCount();
 }
